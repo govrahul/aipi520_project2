@@ -92,7 +92,7 @@ def text_model_auc(train_text: pd.Series, y_tr: np.ndarray, val_text: pd.Series,
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--trials", default="data/processed/trials.parquet", type=Path)
+    ap.add_argument("--trials", default="data/processed/trials", type=Path)
     ap.add_argument("--labels", default="data/processed/labels.parquet", type=Path)
     ap.add_argument("--censoring", default="reports/censoring_by_year.csv", type=Path)
     ap.add_argument("--out", default="reports/leakage.md", type=Path)

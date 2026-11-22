@@ -1,4 +1,4 @@
-"""Which columns of trials.parquet may be used as model features.
+"""Which columns of data/processed/trials may be used as model features.
 
 The model predicts a trial's outcome when the trial starts. A feature is only
 legitimate if its value would have been known then. ClinicalTrials.gov serves

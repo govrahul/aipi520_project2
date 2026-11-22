@@ -15,31 +15,31 @@ A blocked column with a high AUC is leakage we avoided. A caution column with a 
 | enrollment_count | blocked | numeric | 0.708 | 0.500 | 0.004 | ACTUAL enrollment for finished trials (terminated trials enroll fewer); univariate AUC ~0.70 |
 | primary_min_pvalue | blocked | numeric | 0.702 | 0.537 | 0.871 | results section |
 | max_age_years | allowed | numeric | 0.578 | 0.552 | 0.504 |  |
-| org_class | allowed | categorical (OOF target enc.) | 0.572 |  | 0.000 |  |
-| lead_sponsor_class | allowed | categorical (OOF target enc.) | 0.571 |  | 0.000 |  |
-| phase | allowed | categorical (OOF target enc.) | 0.567 |  | 0.000 |  |
-| healthy_volunteers | allowed | categorical (OOF target enc.) | 0.560 | 0.501 | 0.004 |  |
+| org_class | allowed | categorical (OOF target enc.) | 0.570 |  | 0.000 |  |
+| lead_sponsor_class | allowed | categorical (OOF target enc.) | 0.570 |  | 0.000 |  |
+| phase | allowed | categorical (OOF target enc.) | 0.568 |  | 0.000 |  |
 | has_us_site | caution | numeric | 0.557 |  | 0.000 | final site list; a trial stopped early may never have opened later sites |
 | intervention_model | allowed | categorical (OOF target enc.) | 0.557 | 0.500 | 0.012 |  |
 | detailed_description | caution | text (length) | 0.557 | 0.554 | 0.441 | sometimes edited after the trial ends (termination notes, results); use scrub_text |
-| n_arms | allowed | numeric | 0.557 |  | 0.000 |  |
 | arm_types | allowed | list (length) | 0.557 |  | 0.000 |  |
+| n_arms | allowed | numeric | 0.557 |  | 0.000 |  |
 | condition_mesh_ancestors | allowed | list (length) | 0.555 |  | 0.000 |  |
-| has_dmc | allowed | categorical (OOF target enc.) | 0.554 | 0.525 | 0.209 |  |
+| healthy_volunteers | allowed | categorical (OOF target enc.) | 0.555 | 0.501 | 0.004 |  |
+| has_dmc | allowed | categorical (OOF target enc.) | 0.552 | 0.525 | 0.209 |  |
 | maximum_age | allowed | text (length) | 0.551 | 0.552 | 0.504 |  |
 | condition_mesh_terms | allowed | list (length) | 0.551 |  | 0.000 |  |
-| allocation | allowed | categorical (OOF target enc.) | 0.550 | 0.502 | 0.011 |  |
 | std_ages | allowed | list (length) | 0.548 |  | 0.000 |  |
-| masking | allowed | categorical (OOF target enc.) | 0.545 | 0.502 | 0.009 |  |
+| allocation | allowed | categorical (OOF target enc.) | 0.546 | 0.502 | 0.011 |  |
 | brief_summary | caution | text (length) | 0.545 |  | 0.000 | sometimes edited after the trial ends; use scrub_text |
 | eligibility_criteria | allowed | text (length) | 0.544 | 0.500 | 0.000 |  |
+| masking | allowed | categorical (OOF target enc.) | 0.543 | 0.502 | 0.009 |  |
 | minimum_age | allowed | categorical (OOF target enc.) | 0.540 | 0.502 | 0.028 |  |
 | who_masked | allowed | list (length) | 0.540 |  | 0.000 |  |
-| primary_purpose | allowed | categorical (OOF target enc.) | 0.539 | 0.509 | 0.026 |  |
 | intervention_mesh_ancestors | allowed | list (length) | 0.538 |  | 0.000 |  |
 | n_primary_pvalues | blocked | numeric | 0.538 |  | 0.000 | results section |
 | n_primary_sig | blocked | numeric | 0.536 |  | 0.000 | results section |
 | collaborator_classes | allowed | list (length) | 0.531 |  | 0.000 |  |
+| primary_purpose | allowed | categorical (OOF target enc.) | 0.531 | 0.509 | 0.026 |  |
 | intervention_mesh_terms | allowed | list (length) | 0.530 |  | 0.000 |  |
 | n_collaborators | allowed | numeric | 0.530 |  | 0.000 |  |
 | lead_sponsor | allowed | text (length) | 0.530 |  | 0.000 |  |
@@ -63,20 +63,20 @@ A blocked column with a high AUC is leakage we avoided. A caution column with a 
 | status_verified_date | blocked | date (year) | 0.513 |  | 0.000 | record history after the trial |
 | countries | caution | list (length) | 0.512 |  | 0.000 | final site list; a trial stopped early may never have opened later sites |
 | n_countries | caution | numeric | 0.512 |  | 0.000 | final site list; a trial stopped early may never have opened later sites |
+| start_date_type | blocked | categorical (OOF target enc.) | 0.512 | 0.500 | 0.821 | ACTUAL vs ANTICIPATED is updated once the trial starts |
 | brief_title | allowed | text (length) | 0.512 |  | 0.000 |  |
-| completion_date_type | blocked | categorical (OOF target enc.) | 0.511 | 0.500 | 0.051 | ACTUAL vs ANTICIPATED reflects whether the trial finished |
+| enrollment_type | blocked | categorical (OOF target enc.) | 0.512 | 0.501 | 0.029 | ACTUAL vs ESTIMATED reflects whether the trial finished |
 | completion_date | blocked | date (year) | 0.509 | 0.501 | 0.043 | end date: gives trial duration |
-| primary_completion_date_type | blocked | categorical (OOF target enc.) | 0.509 | 0.502 | 0.040 | ACTUAL vs ANTICIPATED reflects whether the trial finished |
+| study_type | allowed | categorical (OOF target enc.) | 0.509 |  | 0.000 |  |
 | min_age_years | allowed | numeric | 0.509 | 0.502 | 0.028 |  |
-| start_date_type | blocked | categorical (OOF target enc.) | 0.508 | 0.500 | 0.821 | ACTUAL vs ANTICIPATED is updated once the trial starts |
 | start_date | allowed | date (year) | 0.508 |  | 0.000 |  |
 | last_update_post_date | blocked | date (year) | 0.507 |  | 0.000 | record history after the trial |
-| sex | allowed | categorical (OOF target enc.) | 0.506 | 0.500 | 0.000 |  |
+| fda_regulated_device | caution | categorical (OOF target enc.) | 0.506 | 0.503 | 0.944 | field added in 2017: missing means the record was not updated since |
 | n_other_outcomes | caution | numeric | 0.505 |  | 0.000 | outcome lists are often revised when results are posted |
-| enrollment_type | blocked | categorical (OOF target enc.) | 0.505 | 0.501 | 0.029 | ACTUAL vs ESTIMATED reflects whether the trial finished |
+| completion_date_type | blocked | categorical (OOF target enc.) | 0.505 | 0.500 | 0.051 | ACTUAL vs ANTICIPATED reflects whether the trial finished |
+| primary_completion_date_type | blocked | categorical (OOF target enc.) | 0.503 | 0.502 | 0.040 | ACTUAL vs ANTICIPATED reflects whether the trial finished |
 | fda_regulated_drug | caution | categorical (OOF target enc.) | 0.503 | 0.503 | 0.943 | field added in 2017: missing means the record was not updated since |
-| study_type | allowed | categorical (OOF target enc.) | 0.503 |  | 0.000 |  |
-| fda_regulated_device | caution | categorical (OOF target enc.) | 0.501 | 0.503 | 0.944 | field added in 2017: missing means the record was not updated since |
+| sex | allowed | categorical (OOF target enc.) | 0.501 | 0.500 | 0.000 |  |
 | primary_completion_date | blocked | date (year) | 0.501 | 0.502 | 0.040 | end date: gives trial duration |
 | n_overall_officials | caution | numeric | 0.501 |  | 0.000 | contact list of the latest record version |
 

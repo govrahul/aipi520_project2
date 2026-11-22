@@ -2,7 +2,7 @@
 
 Inputs:
     data/processed/labels.parquet          (src/label.py)
-    data/processed/trials.parquet          (src/parse.py)
+    data/processed/trials/                 (src/parse.py)
     data/external/top/phase_*.csv          TOP benchmark (Fu et al. 2022), from
         https://github.com/futianfan/clinical-trial-outcome-prediction/tree/main/data
     reports/label_audit_sample.csv         held-out audit sample with verdicts
@@ -48,7 +48,7 @@ def load_top(top_dir: Path) -> pd.DataFrame | None:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--labels", default="data/processed/labels.parquet", type=Path)
-    ap.add_argument("--trials", default="data/processed/trials.parquet", type=Path)
+    ap.add_argument("--trials", default="data/processed/trials", type=Path)
     ap.add_argument("--top", default="data/external/top", type=Path)
     ap.add_argument("--audit", default="reports/label_audit_sample.csv", type=Path)
     ap.add_argument("--out", default="reports/labels.md", type=Path)

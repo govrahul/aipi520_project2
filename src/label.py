@@ -1,6 +1,6 @@
 """Build outcome labels from overall_status + why_stopped.
 
-Input:  data/processed/trials.parquet   (src/parse.py)
+Input:  data/processed/trials/          (src/parse.py)
 Output: data/processed/labels.parquet   one row per trial, joinable on nct_id
 
 Label definitions
@@ -38,6 +38,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from pathlib import Path
 
@@ -207,7 +208,7 @@ def cohort_mask(lab: pd.DataFrame, start_min: int, start_max: int, snapshot: pd.
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--trials", default="data/processed/trials.parquet", type=Path)
+    ap.add_argument("--trials", default="data/processed/trials", type=Path)
     ap.add_argument("--out", default="data/processed/labels.parquet", type=Path)
     ap.add_argument("--start-min", default=START_MIN, type=int, help="first start year kept (registration became mandatory in 2005)")
     ap.add_argument("--start-max", default=START_MAX, type=int, help="last start year kept (later cohorts are not finished yet)")
@@ -216,7 +217,7 @@ def main() -> None:
     cols = ["nct_id", "overall_status", "why_stopped", "phase", "start_date", "completion_date", "primary_completion_date",
             "first_post_date", "n_primary_pvalues", "n_primary_sig"]
     df = pd.read_parquet(args.trials, columns=cols)
-    snapshot = pd.Timestamp(pd.read_json(args.trials.parent.parent / "raw" / "manifest.json", typ="series")["data_timestamp"]).normalize()
+    snapshot = pd.Timestamp(json.loads((args.trials.parent / "snapshot.json").read_text())["data_timestamp"]).normalize()
 
     lab = make_labels(df)
     lab["in_cohort"], lab["exclusion_reason"] = cohort_mask(lab, args.start_min, args.start_max, snapshot)

@@ -1,7 +1,9 @@
 """Flatten the raw API pages in ``data/raw/`` into one table, one row per trial.
 
-Output: ``data/processed/trials.parquet``. Text fields stay raw; list fields
-(conditions, countries, MeSH terms, ...) are stored as lists.
+Output: ``data/processed/trials/part-NN.parquet`` (read the folder with
+``pd.read_parquet("data/processed/trials")``) and ``data/processed/snapshot.json``
+(query and database timestamp). Text fields stay raw; list fields (conditions,
+countries, MeSH terms, ...) are stored as lists.
 
 Some columns describe what happened *after* the trial started. They are kept
 for labeling and analysis; src/feature_policy.py says which columns may be
@@ -9,7 +11,7 @@ used as model features.
 
 Usage:
     python src/parse.py
-    python src/parse.py --raw data/raw --out data/processed/trials.parquet
+    python src/parse.py --raw data/raw --out data/processed/trials
 """
 
 from __future__ import annotations
@@ -209,10 +211,25 @@ def parse_file(path: Path) -> list[dict]:
         return [flatten(json.loads(line)) for line in f]
 
 
+def write_shards(df: pd.DataFrame, out_dir: Path, rows_per_shard: int) -> list[Path]:
+    """Write df as out_dir/part-NN.parquet (zstd). Shards stay well under GitHub's 50 MB warning size,
+    so the table can live in the repo without Git LFS. Read it back with pd.read_parquet(out_dir)."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for old in out_dir.glob("part-*.parquet"):
+        old.unlink()
+    paths = []
+    for i, start in enumerate(range(0, len(df), rows_per_shard)):
+        p = out_dir / f"part-{i:02d}.parquet"
+        df.iloc[start:start + rows_per_shard].to_parquet(p, index=False, compression="zstd", compression_level=9)
+        paths.append(p)
+    return paths
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--raw", default="data/raw", type=Path)
-    ap.add_argument("--out", default="data/processed/trials.parquet", type=Path)
+    ap.add_argument("--out", default="data/processed/trials", type=Path, help="output folder of parquet shards")
+    ap.add_argument("--rows-per-shard", default=25000, type=int)
     args = ap.parse_args()
 
     manifest = json.loads((args.raw / "manifest.json").read_text())
@@ -225,12 +242,16 @@ def main() -> None:
     df = pd.DataFrame(rows)
 
     n_before = len(df)
-    df = df.drop_duplicates("nct_id").reset_index(drop=True)
-    df.attrs["data_timestamp"] = manifest["data_timestamp"]
+    df = df.drop_duplicates("nct_id").sort_values("nct_id").reset_index(drop=True)
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    df.to_parquet(args.out, index=False)
-    print(f"{len(df)} trials ({n_before - len(df)} duplicates dropped), {df.shape[1]} columns -> {args.out}")
+    paths = write_shards(df, args.out, args.rows_per_shard)
+    snapshot = {k: manifest[k] for k in ("data_timestamp", "api_version", "query", "expected_total")}
+    snapshot["n_trials"] = len(df)
+    (args.out.parent / "snapshot.json").write_text(json.dumps(snapshot, indent=1))
+
+    mb = sum(p.stat().st_size for p in paths) / 2**20
+    print(f"{len(df)} trials ({n_before - len(df)} duplicates dropped), {df.shape[1]} columns "
+          f"-> {args.out}/ ({len(paths)} shards, {mb:.0f} MB)")
     print(f"snapshot: {manifest['data_timestamp']}  expected: {manifest['expected_total']}")
 
 

@@ -1,0 +1,11 @@
+{
+ "data_timestamp": "2026-11-20T10:00:05",
+ "api_version": "2.0.5",
+ "query": {
+  "filter.advanced": "AREA[StudyType]INTERVENTIONAL AND AREA[Phase](PHASE1 OR PHASE2 OR PHASE3) AND AREA[InterventionType](DRUG OR BIOLOGICAL)",
+  "filter.overallStatus": "COMPLETED,TERMINATED,WITHDRAWN",
+  "pageSize": 1000
+ },
+ "expected_total": 116202,
+ "n_trials": 116202
+}

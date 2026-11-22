@@ -1,6 +1,9 @@
-# downloaded and derived data (rebuild with: python run_pipeline.py)
-data/
+# Processed data (data/processed/) IS committed so the whole team uses the same snapshot.
+# Raw API pages are too large for git; rebuild them with: python run_pipeline.py --refresh
+data/raw/
 raw_data/
+# TOP benchmark has no license, so it is not redistributed; get it with: python src/fetch_top.py
+data/external/
 
 # course handouts (not ours to redistribute)
 Project 2.pptx
@@ -9,4 +12,5 @@ trials_data_students.ipynb
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+.pytest_cache/
 .venv/
